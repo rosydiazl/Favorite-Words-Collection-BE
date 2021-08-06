@@ -59,6 +59,7 @@ router.get('/words/:id', requireToken, (req, res, next) => {
 // POST /words
 router.post('/words', requireToken, (req, res, next) => {
   // set owner of new word to be current user
+  console.log(req.body)
   req.body.word.owner = req.user.id
 
   Word.create(req.body.word)
