@@ -1,5 +1,5 @@
 #!/bin/bash
-# TOKEN="6e8b4bb58556ac8b89ce84bc8d22187e" WORD="hello" DEFINITION="greeting" ORIGIN="Latin" LANGUAGE="English" SENTENCE="Hello, friend" sh curl-scripts/words/create.sh 
+# TOKEN="d4b387d44b1424ea42fcfce42f67b39c" WORD="hola" DEFINITION="saludar" ORIGIN="latin" LANGUAGE="espanol" SENTENCE="hola" sh curl-scripts/words/create.sh 
 
 API="http://localhost:4741"
 URL_PATH="/words"
