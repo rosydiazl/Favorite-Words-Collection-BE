@@ -46,8 +46,9 @@ router.get('/words', requireToken, (req, res, next) => {
 // SHOW
 // GET /words/5a7db6c74d55bc51bdf39793
 router.get('/words/:id', requireToken, (req, res, next) => {
+  const id = req.params.id
   // req.params.id will be set based on the `:id` in the route
-  Word.findById(req.params.id)
+  Word.find({ owner: req.user.id, id: id })
     .then(handle404)
     // if `findById` is successful, respond with 200 and "word" JSON
     .then(word => res.status(200).json({ word: word.toObject() }))
@@ -99,7 +100,9 @@ router.patch('/words/:id', requireToken, removeBlanks, (req, res, next) => {
 // DESTROY
 // DELETE /words/5a7db6c74d55bc51bdf39793
 router.delete('/words/:id', requireToken, (req, res, next) => {
-  Word.findById(req.params.id)
+  const id = req.params.id
+  Word.findById(id)
+  // Handle 404 error if it wasn't found
     .then(handle404)
     .then(word => {
       // throw an error if current user doesn't own `word`
