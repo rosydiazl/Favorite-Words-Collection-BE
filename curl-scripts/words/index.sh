@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# TOKEN="d4b387d44b1424ea42fcfce42f67b39c" sh curl-scripts/words/index.sh
+# TOKEN="d52fbcae148c1460a30037bfa9f3f106" sh curl-scripts/words/index.sh
 
 API="http://localhost:4741"
 URL_PATH="/words"

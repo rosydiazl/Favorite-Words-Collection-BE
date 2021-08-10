@@ -48,10 +48,14 @@ router.get('/words', requireToken, (req, res, next) => {
 router.get('/words/:id', requireToken, (req, res, next) => {
   const id = req.params.id
   // req.params.id will be set based on the `:id` in the route
-  Word.find({ owner: req.user.id, id: id })
+  Word.find({ owner: req.user.id, _id: id })
     .then(handle404)
     // if `findById` is successful, respond with 200 and "word" JSON
-    .then(word => res.status(200).json({ word: word.toObject() }))
+    // .then(word => res.status(200).json({ word: word.toObject() }))
+    .then(words => {
+      console.log('Word is: ', words) // what is word?
+      return res.status(200).json({ word: words[0].toObject() })
+    })
     // if an error occurs, pass it to the handler
     .catch(next)
 })
@@ -80,16 +84,27 @@ router.patch('/words/:id', requireToken, removeBlanks, (req, res, next) => {
   // if the client attempts to change the `owner` property by including a new
   // owner, prevent that by deleting that key/value pair
   delete req.body.word.owner
+  // get id of words form params
+  const id = req.params.id
+  // get words data from request
+  const wordData = req.body.word
 
-  Word.findById(req.params.id)
+  Word.findById(id)
     .then(handle404)
-    .then(word => {
+    .then(word =>
       // pass the `req` object and the Mongoose record to `requireOwnership`
       // it will throw an error if the current user isn't the owner
       requireOwnership(req, word)
 
       // pass the result of Mongoose's `.update` to the next `.then`
-      return word.updateOne(req.body.word)
+      // return word.updateOne(req.body.word)
+    )
+    // update word
+    .then(word => {
+      // update word with wordData
+      Object.assign(word, wordData)
+      // save word to mongodb
+      return word.save()
     })
     // if that succeeded, return 204 and no JSON
     .then(() => res.sendStatus(204))
